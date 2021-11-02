@@ -3,31 +3,11 @@ import { Button, Container, Form } from 'react-bootstrap';
 
 export const Uploading = (props) => {
   const [fileInputState, setFileInputState] = useState('');
-  const [selectedFile, setSelectedFile] = useState(false);
   const [previewSource, setPreviewSource] = useState(false);
 
   const handleInputChange = async (e) => {
     const file = e.target.files[0];
     previewFile(file);
-
-    console.log('This is the files -->', file);
-
-    const data = new FormData();
-    // data.append('file', files[0]);
-    // data.append('upload_preset', 'images');
-
-    console.log('This is the data! -->', data);
-
-    // setLoading(true);
-    const res = await fetch(
-      `https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUD_NAME}/image/upload`,
-      {
-        method: 'POST',
-        body: data,
-      }
-    );
-    const File = await res.json();
-    console.log(File);
   };
 
   const previewFile = (file) => {
@@ -40,13 +20,11 @@ export const Uploading = (props) => {
 
   const handleSubmitFile = (e) => {
     e.preventDefault();
-    console.log('hi');
     if (!previewSource) return;
     uploadImage(previewSource);
   };
 
   const uploadImage = async (base64EncodedImage) => {
-    console.log(base64EncodedImage);
     try {
       await fetch('/api/upload', {
         method: 'POST',
@@ -54,7 +32,7 @@ export const Uploading = (props) => {
         headers: { 'Content-type': 'application/json' },
       });
     } catch (err) {
-      console.error(err);
+      console.error('Upload error -->', err);
     }
   };
 
